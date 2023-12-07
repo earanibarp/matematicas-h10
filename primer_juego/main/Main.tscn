@@ -1,0 +1,105 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://assets/Kenney Bold.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://main/Main.gd" type="Script" id=3]
+[ext_resource path="res://main/HUD.gd" type="Script" id=4]
+[ext_resource path="res://enemy/Enemy.tscn" type="PackedScene" id=5]
+
+[sub_resource type="DynamicFont" id=1]
+size = 25
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 25
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 30
+font_data = ExtResource( 1 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 60.5, 7 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 10, 119.5 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 10, 118.5 )
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 50, 134 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="GemContainer" type="Node2D" parent="."]
+
+[node name="HUD" type="Control" parent="."]
+margin_right = 480.0
+margin_bottom = 40.0
+script = ExtResource( 4 )
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = 480.0
+margin_bottom = 40.0
+
+[node name="LabelScore" type="Label" parent="HUD/MarginContainer"]
+margin_right = 475.0
+margin_bottom = 39.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "0"
+align = 2
+
+[node name="LabelTimer" type="Label" parent="HUD/MarginContainer"]
+margin_right = 475.0
+margin_bottom = 39.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "0"
+
+[node name="LabelGameOver" type="Label" parent="HUD"]
+visible = false
+margin_left = 105.0
+margin_top = 334.0
+margin_right = 383.0
+margin_bottom = 380.0
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 3 )
+text = "GAME OVER!!"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Enemy" parent="." instance=ExtResource( 5 )]
+position = Vector2( 239, 332 )
+
+[node name="Platform" type="StaticBody2D" parent="."]
+position = Vector2( 195, 376 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+position = Vector2( 50.5, -3 )
+shape = SubResource( 4 )
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
+position = Vector2( -3, 280 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+position = Vector2( 478, 282 )
+shape = SubResource( 6 )
+
+[connection signal="hurt" from="Player" to="." method="_on_Player_hurt"]
+[connection signal="picked" from="Player" to="." method="_on_Player_picked"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
