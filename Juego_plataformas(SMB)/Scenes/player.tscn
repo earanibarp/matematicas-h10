@@ -1,86 +1,95 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=18 format=2]
 
-[ext_resource path="res://assets/mario/player_mario.png" type="Texture" id=1]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Run3.png" type="Texture" id=1]
 [ext_resource path="res://Scripts/player.gd" type="Script" id=2]
-
-[sub_resource type="AtlasTexture" id=1]
-atlas = ExtResource( 1 )
-region = Rect2( 96, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 1 )
-region = Rect2( 0, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 1 )
-region = Rect2( 80, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 1 )
-region = Rect2( 16, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 1 )
-region = Rect2( 32, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 1 )
-region = Rect2( 48, 0, 16, 32 )
-
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 1 )
-region = Rect2( 64, 0, 16, 32 )
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Death.png" type="Texture" id=3]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Idle.png" type="Texture" id=4]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Jump.png" type="Texture" id=5]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Run2.png" type="Texture" id=6]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Run1.png" type="Texture" id=7]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Run2.png" type="Texture" id=8]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Run1.png" type="Texture" id=9]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Idle.png" type="Texture" id=10]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Slide.png" type="Texture" id=11]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Jump.png" type="Texture" id=12]
+[ext_resource path="res://assets/assets/Sprites/Mario_Small_Slide.png" type="Texture" id=13]
+[ext_resource path="res://assets/assets/Sprites/Mario_Big_Run3.png" type="Texture" id=14]
+[ext_resource path="res://collisions/small_areaHit_collision.tres" type="Shape2D" id=15]
+[ext_resource path="res://collisions/small_player_collision.tres" type="Shape2D" id=16]
 
 [sub_resource type="SpriteFrames" id=7]
 animations = [ {
-"frames": [ SubResource( 1 ) ],
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "big_idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "big_jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 8 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "big_run",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "big_slide",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
 "loop": true,
 "name": "die",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 2 ) ],
+"frames": [ ExtResource( 4 ) ],
 "loop": true,
 "name": "small_idle",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 3 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": true,
 "name": "small_jump",
 "speed": 10.0
 }, {
-"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"frames": [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 1 ) ],
 "loop": true,
 "name": "small_run",
 "speed": 8.0
 }, {
-"frames": [ SubResource( 9 ) ],
+"frames": [ ExtResource( 13 ) ],
 "loop": true,
 "name": "small_slide",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 10 ), ExtResource( 4 ), ExtResource( 10 ), ExtResource( 4 ), ExtResource( 10 ), ExtResource( 4 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "small_to_big",
+"speed": 5.0
 } ]
 
-[sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 5.5, 7.5 )
-
-[sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 4, 3.5 )
-
 [node name="player" type="KinematicBody2D" groups=["player"]]
+collision_layer = 2
+collision_mask = 13
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 7 )
-animation = "small_run"
+animation = "small_to_big"
+frame = 5
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0.5, 8.5 )
-shape = SubResource( 8 )
+position = Vector2( 0, 1 )
+shape = ExtResource( 16 )
 
 [node name="AreaHit" type="Area2D" parent="."]
+collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AreaHit"]
-position = Vector2( 0, 2.5 )
-shape = SubResource( 10 )
+position = Vector2( 0.5, -5.5 )
+shape = ExtResource( 15 )
 
 [connection signal="body_entered" from="AreaHit" to="." method="_on_AreaHit_body_entered"]

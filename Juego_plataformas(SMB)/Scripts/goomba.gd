@@ -3,7 +3,7 @@ extends KinematicBody2D
 const SPEED = 50
 
 var velocity = Vector2(-SPEED, 0)
-onready var camera = get_parent().get_node("player/Camera2D")
+onready var camera = get_parent().get_parent().get_node("player/Camera2D")
 var side_lenght = OS.window_size.x * 0.5
 
 func _ready():
@@ -41,6 +41,7 @@ func _on_AreaCrush_body_entered(body):
 		$AnimationPlayer.play("dead")
 		$Tween.start()
 		yield($Tween, "tween_completed")
+		get_parent().get_parent().points += 200
 		queue_free()
 		
 
@@ -48,3 +49,4 @@ func _on_AreaCrush_body_entered(body):
 func _on_AreaHit_body_entered(body):
 	if body.is_in_group("player") && velocity.x != 0:
 		print("Mario muere!")
+		body.game_over()
